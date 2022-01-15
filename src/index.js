@@ -16,7 +16,7 @@ function displayTime() {
     "Wednesday",
     "Thursday",
     "Friday",
-    "Saturday"
+    "Saturday",
   ];
   let day = days[currentTime.getDay()];
 
@@ -35,12 +35,13 @@ function showWeather(response) {
   document.querySelector("#wind-level").innerHTML = `🌬 ${Math.round(
     response.data.wind.speed * 3.6
   )} km/h`;
+  document.querySelector("#cityName").innerHTML = `${response.data.name}`;
 }
 
 function search(event) {
   event.preventDefault();
   let searchInput = document.querySelector("#city-input");
-  let h2 = document.querySelector("h2");
+  let h2 = document.querySelector("#cityName");
   h2.innerHTML = `${searchInput.value}`;
 
   let apiKey = "973e48712864976fc2baad0a36b5f0f8";
@@ -54,8 +55,9 @@ form.addEventListener("submit", search);
 
 function getCurrentCityTemp(event) {
   event.preventDefault();
+  navigator.geolocation.getCurrentPosition(searchPosition);
 
-  function handlePosition(position) {
+  function searchPosition(position) {
     let lat = position.coords.latitude;
     let lon = position.coords.longitude;
 
@@ -64,8 +66,6 @@ function getCurrentCityTemp(event) {
     console.log(apiUrl);
     axios.get(apiUrl).then(showWeather);
   }
-
-  navigator.geolocation.getCurrentPosition(handlePosition);
 }
 
 let locationButton = document.querySelector("#location-button");
